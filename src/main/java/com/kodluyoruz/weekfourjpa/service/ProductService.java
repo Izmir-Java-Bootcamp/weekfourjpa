@@ -35,4 +35,9 @@ public class ProductService {
                 .price(product.getPrice())
                 .build();
     }
+
+    public ProductDto getProduct(int id) {
+        Product product = repository.findById(id).orElseThrow(() -> new RuntimeException("not found"));
+        return convertEntity(product);
+    }
 }

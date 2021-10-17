@@ -21,6 +21,11 @@ public class ProductController {
         return service.createProduct(request);
     }
 
+    @GetMapping("{id}")
+    public ProductDto getProduct(@PathVariable int id){
+        return service.getProduct(id);
+    }
+
 
 
 }
