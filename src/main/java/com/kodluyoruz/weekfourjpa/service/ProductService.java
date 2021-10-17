@@ -11,36 +11,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.kodluyoruz.weekfourjpa.model.mapper.ProductMapper.PRODUCT_MAPPER;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository repository;
 
     public ProductDto createProduct(CreateUpdateProductRequest request) {
-        Product product = Product.builder()
-                .name(request.getName())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .creationDate(new Date())
-                .deleted(false)
-                .build();
+        Product product = PRODUCT_MAPPER.createProduct(request);
 
         Product savedProduct = repository.save(product);
-        return convertEntity(savedProduct);
+        return PRODUCT_MAPPER.toProductDto(savedProduct);
     }
 
-    private ProductDto convertEntity(Product product) {
-        return ProductDto.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .build();
-    }
 
     public ProductDto getProduct(int id) {
         Product product = getProductEntity(id);
-        return convertEntity(product);
+        return PRODUCT_MAPPER.toProductDto(product);
     }
 
     private Product getProductEntity(int id) {
@@ -49,21 +37,18 @@ public class ProductService {
 
     public ProductDto updateProduct(int id, CreateUpdateProductRequest request) {
         Product product = getProductEntity(id);
-        product.setName(request.getName());
-        product.setDescription(request.getDescription());
-        product.setPrice(request.getPrice());
-        product.setLastModificationDate(new Date());
+        PRODUCT_MAPPER.updateProduct(product, request);
 
         Product updatedProduct = repository.save(product);
-        return convertEntity(updatedProduct);
+        return PRODUCT_MAPPER.toProductDto(updatedProduct);
     }
 
     public List<ProductDto> getProducts(String name) {
         if (name != null) {
-            return repository.findAllByNameContainsOrDescriptionContains(name, name).stream().map(this::convertEntity).collect(Collectors.toList());
+            return PRODUCT_MAPPER.toProductDtoList(repository.findAllByNameContainsOrDescriptionContains(name, name));
         }
 
-        return repository.findAll().stream().map(this::convertEntity).collect(Collectors.toList());
+        return PRODUCT_MAPPER.toProductDtoList(repository.findAll());
     }
 
     public void deleteProduct(int id) {
