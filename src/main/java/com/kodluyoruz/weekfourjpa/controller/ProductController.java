@@ -3,20 +3,24 @@ package com.kodluyoruz.weekfourjpa.controller;
 import com.kodluyoruz.weekfourjpa.model.dto.ProductDto;
 import com.kodluyoruz.weekfourjpa.model.request.CreateUpdateProductRequest;
 import com.kodluyoruz.weekfourjpa.service.ProductService;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("products")
 @RequiredArgsConstructor
+@Slf4j
 public class ProductController {
     private final ProductService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ProductDto createProduct(@RequestBody CreateUpdateProductRequest request){
         return service.createProduct(request);
     }
+
+
+
 }
