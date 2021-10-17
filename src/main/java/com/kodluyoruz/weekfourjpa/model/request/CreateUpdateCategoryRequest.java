@@ -5,13 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
-public class CreateUpdateProductRequest {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreateUpdateCategoryRequest {
     private String name;
-    private String description;
-    private Double price;
-    private Integer categoryId;
+    private Integer parentId;
 }
